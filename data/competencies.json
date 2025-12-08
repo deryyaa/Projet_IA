@@ -1,20 +1,21 @@
 {
   "Data Analysis": [
-    "data cleaning",
-    "data visualization",
-    "statistics",
-    "Python programming"
+    "data cleaning : préparer et nettoyer des données avec la bibliothèque pandas",
+    "data visualization : creer des visualisations avec power bi, nltpk et tableau",
+    "statistics : méthodes statistiques descriptives et inférentielles pour analyser des jeux de données",
+    "Python programming : Python creer des scripts, automatiser, traitements de données,Pandas, NumPy, Matplotlib, Scikit-learn"
+    
   ],
   "Machine Learning": [
-    "classification",
-    "regression",
-    "neural networks",
-    "model evaluation"
+    "classification : entraîner des modèles de classification pour prédire des catégories à partir de données.",
+    "regression : développer des modèles de régression pour estimer des valeurs numériques et analyser des relations entre variables.",
+    "neural networks : l’entraînement de réseaux de neurones,  apprentissage automatique",
+    "model evaluation : évaluation des modèles grâce à des métriques adaptées pour mesurer leur performance et leur fiabilité."
   ],
   "NLP": [
-    "tokenization",
-    "word embeddings",
-    "transformers",
-    "semantic analysis"
+    "tokenization : préparer le texte en le découpant en unités",
+    "word embeddings : représenter les mots sous forme de vecteurs",
+    "transformers : utilisation de modèles Transformers",
+    "semantic analysis : analyser le sens des textes"
   ]
 }
