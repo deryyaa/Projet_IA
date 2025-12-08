@@ -17,5 +17,24 @@
     "word embeddings : représenter les mots sous forme de vecteurs",
     "transformers : utilisation de modèles Transformers",
     "semantic analysis : analyser le sens des textes"
-  ]
+  ],
+  "Data Engineering": [
+  "ETL pipelines : concevoir et automatiser des pipelines d'extraction, transformation et chargement de données.",
+  "SQL & NoSQL : manipuler, interroger et optimiser des bases de données relationnelles et non relationnelles.",
+  "Data Lakes : organiser et structurer des données volumineuses pour l'analyse et l’IA.",
+  "API development : créer des API pour exposer et interconnecter des services data."
+],
+  "Cloud": [
+  "cloud storage : utiliser des services de stockage pour gérer des données à grande échelle.",
+  "compute services : déployer des applications et modèles sur des environnements cloud.",
+  "serverless : exploiter des architectures sans serveur pour réduire les coûts et automatiser.",
+  "security & IAM : mettre en place des stratégies de sécurité, gestion des accès et chiffrement."
+],
+  "Generative AI": [
+  "prompt engineering : concevoir des prompts efficaces pour optimiser les sorties des modèles.",
+  "LLM integration : intégrer et utiliser des modèles de langage (GPT, Llama, Mistral…).",
+  "RAG systems : combiner recherche documentaire et IA générative pour améliorer les réponses.",
+  "model evaluation : mesurer la qualité, cohérence et sécurité des outputs générés."
+]
+
 }

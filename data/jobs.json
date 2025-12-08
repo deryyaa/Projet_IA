@@ -1,6 +1,31 @@
 {
-  "Data Analyst": ["Data Analysis"],
-  "ML Engineer": ["Data Analysis", "Machine Learning"],
-  "NLP Engineer": ["Data Analysis", "NLP"],
-  "Data Scientist": ["Data Analysis", "Machine Learning", "NLP"]
+  "Data Analyst": [
+    "Data Analysis",
+    "Data Engineering",
+    "Cloud"
+  ],
+
+  "ML Engineer": [
+    "Data Analysis",
+    "Machine Learning",
+    "Data Engineering",
+    "Cloud"
+  ],
+
+  "NLP Engineer": [
+    "Data Analysis",
+    "NLP",
+    "Machine Learning",
+    "Generative AI",
+    "Cloud"
+  ],
+
+  "Data Scientist": [
+    "Data Analysis",
+    "Machine Learning",
+    "NLP",
+    "Generative AI",
+    "Data Engineering",
+    "Cloud"
+  ]
 }
