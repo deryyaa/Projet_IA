@@ -1,0 +1,20 @@
+{
+  "Data Analysis": [
+    "data cleaning",
+    "data visualization",
+    "statistics",
+    "Python programming"
+  ],
+  "Machine Learning": [
+    "classification",
+    "regression",
+    "neural networks",
+    "model evaluation"
+  ],
+  "NLP": [
+    "tokenization",
+    "word embeddings",
+    "transformers",
+    "semantic analysis"
+  ]
+}

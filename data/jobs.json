@@ -1,0 +1,6 @@
+{
+  "Data Analyst": ["Data Analysis"],
+  "ML Engineer": ["Data Analysis", "Machine Learning"],
+  "NLP Engineer": ["Data Analysis", "NLP"],
+  "Data Scientist": ["Data Analysis", "Machine Learning", "NLP"]
+}
