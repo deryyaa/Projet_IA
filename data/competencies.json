@@ -1,21 +1,70 @@
 {
   "Data Analysis": [
-    "data cleaning : préparer et nettoyer des données avec la bibliothèque pandas",
-    "data visualization : creer des visualisations avec power bi, nltpk et tableau",
-    "statistics : méthodes statistiques descriptives et inférentielles pour analyser des jeux de données",
-    "Python programming : Python creer des scripts, automatiser, traitements de données,Pandas, NumPy, Matplotlib, Scikit-learn"
-    
+    "data cleaning",
+    "data preprocessing",
+    "exploratory data analysis",
+    "data visualization",
+    "statistics and hypothesis testing",
+    "descriptive statistics",
+    "pandas dataframes manipulation",
+    "using Python for data analysis",
+    "building KPIs from raw data"
+  ],
+  "Business Intelligence": [
+    "dashboard design",
+    "data visualization with Power BI",
+    "data visualization with Tableau",
+    "reporting and storytelling with data",
+    "creating interactive dashboards",
+    "building business reports",
+    "self service BI",
+    "data aggregation and filtering",
+    "connecting BI tools to data sources"
   ],
   "Machine Learning": [
-    "classification : entraîner des modèles de classification pour prédire des catégories à partir de données.",
-    "regression : développer des modèles de régression pour estimer des valeurs numériques et analyser des relations entre variables.",
-    "neural networks : l’entraînement de réseaux de neurones,  apprentissage automatique",
-    "model evaluation : évaluation des modèles grâce à des métriques adaptées pour mesurer leur performance et leur fiabilité."
+    "classification models",
+    "regression models",
+    "supervised learning",
+    "unsupervised learning",
+    "model evaluation metrics",
+    "cross validation",
+    "hyperparameter tuning",
+    "feature engineering",
+    "deep learning",
+    "neural networks"
   ],
-  "NLP": [
-    "tokenization : préparer le texte en le découpant en unités",
-    "word embeddings : représenter les mots sous forme de vecteurs",
-    "transformers : utilisation de modèles Transformers",
-    "semantic analysis : analyser le sens des textes"
+  "Data Engineering": [
+    "ETL pipelines",
+    "data ingestion",
+    "data transformation",
+    "SQL queries and joins",
+    "database design",
+    "data warehousing",
+    "working with big data",
+    "batch processing",
+    "scheduling data workflows",
+    "clean data architecture"
+  ],
+  "Natural Language Processing": [
+    "tokenization",
+    "text preprocessing",
+    "stemming and lemmatization",
+    "word embeddings",
+    "transformer models",
+    "sentiment analysis",
+    "semantic similarity",
+    "named entity recognition",
+    "prompt engineering for NLP"
+  ],
+  "MLOps & Cloud": [
+    "model deployment in production",
+    "monitoring machine learning models",
+    "CI CD for ML",
+    "Docker and containerization",
+    "using cloud platforms",
+    "building ML APIs",
+    "versioning models and data",
+    "automating retraining pipelines",
+    "managing environments"
   ]
 }

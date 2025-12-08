@@ -1,6 +1,66 @@
 {
-  "Data Analyst": ["Data Analysis"],
-  "ML Engineer": ["Data Analysis", "Machine Learning"],
-  "NLP Engineer": ["Data Analysis", "NLP"],
-  "Data Scientist": ["Data Analysis", "Machine Learning", "NLP"]
+  "Data Analyst": {
+    "Data Analysis": 0.9,
+    "Business Intelligence": 0.8,
+    "Machine Learning": 0.4,
+    "Data Engineering": 0.3,
+    "Natural Language Processing": 0.2,
+    "MLOps & Cloud": 0.2
+  },
+  "BI Analyst": {
+    "Data Analysis": 0.6,
+    "Business Intelligence": 0.95,
+    "Machine Learning": 0.3,
+    "Data Engineering": 0.3,
+    "Natural Language Processing": 0.1,
+    "MLOps & Cloud": 0.1
+  },
+  "Data Scientist": {
+    "Data Analysis": 0.8,
+    "Business Intelligence": 0.5,
+    "Machine Learning": 0.9,
+    "Data Engineering": 0.4,
+    "Natural Language Processing": 0.5,
+    "MLOps & Cloud": 0.3
+  },
+  "ML Engineer": {
+    "Data Analysis": 0.5,
+    "Business Intelligence": 0.2,
+    "Machine Learning": 0.95,
+    "Data Engineering": 0.6,
+    "Natural Language Processing": 0.4,
+    "MLOps & Cloud": 0.7
+  },
+  "Data Engineer": {
+    "Data Analysis": 0.4,
+    "Business Intelligence": 0.3,
+    "Machine Learning": 0.3,
+    "Data Engineering": 0.95,
+    "Natural Language Processing": 0.2,
+    "MLOps & Cloud": 0.5
+  },
+  "MLOps Engineer": {
+    "Data Analysis": 0.3,
+    "Business Intelligence": 0.2,
+    "Machine Learning": 0.6,
+    "Data Engineering": 0.7,
+    "Natural Language Processing": 0.3,
+    "MLOps & Cloud": 0.95
+  },
+  "NLP Engineer": {
+    "Data Analysis": 0.4,
+    "Business Intelligence": 0.2,
+    "Machine Learning": 0.7,
+    "Data Engineering": 0.3,
+    "Natural Language Processing": 0.95,
+    "MLOps & Cloud": 0.3
+  },
+  "Data Product Owner": {
+    "Data Analysis": 0.7,
+    "Business Intelligence": 0.8,
+    "Machine Learning": 0.4,
+    "Data Engineering": 0.3,
+    "Natural Language Processing": 0.3,
+    "MLOps & Cloud": 0.2
+  }
 }
