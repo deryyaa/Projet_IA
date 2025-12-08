@@ -1,6 +1,9 @@
 import streamlit as st
 import json
 import matplotlib.pyplot as plt
+import numpy as np
+import os
+from datetime import datetime
 
 from core.embeddings import EmbeddingModel
 from core.preprocessing import preprocess_text
@@ -9,12 +12,50 @@ from core.generator import GenAIClient
 
 st.set_page_config(page_title="AISCA", page_icon="🧠")
 
+USER_RESULTS_PATH = "outputs/user_results.json"
+
+
+def save_result(raw_answers: dict):
+    """
+    Sauvegarde une nouvelle entrée dans outputs/user_results.json.
+    raw_answers : dict contenant réponses utilisateur + scores + reco.
+    """
+    # Charger l'existant
+    if os.path.exists(USER_RESULTS_PATH):
+        try:
+            with open(USER_RESULTS_PATH, "r") as f:
+                data = json.load(f)
+                if not isinstance(data, list):
+                    data = []
+        except json.JSONDecodeError:
+            data = []
+    else:
+        data = []
+
+    data.append(raw_answers)
+
+    with open(USER_RESULTS_PATH, "w") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+
+def get_global_profile_label(global_score: float) -> str:
+    """
+    Retourne un label de profil global à partir du score agrégé.
+    """
+    if global_score >= 0.7:
+        return "Data Scientist"
+    elif global_score >= 0.5:
+        return "ML Engineer"
+    else:
+        return "Entry-level Analyst"
+
+
 st.title("AISCA – Agent Intelligent Sémantique pour la Cartographie des Compétences")
 
 st.markdown("""
 Bienvenue dans le MVP d'AISCA.
 
-1. Saisis une description de tes compétences et expériences (en français ou en anglais).
+1. Réponds au questionnaire ci-dessous.
 2. Nous analysons sémantiquement ton texte par rapport à un référentiel de compétences.
 3. Nous calculons un score par bloc de compétences.
 4. Nous te proposons ensuite les métiers les plus alignés avec ton profil.
@@ -27,19 +68,80 @@ with open("data/competencies.json", "r") as f:
 with open("data/jobs.json", "r") as f:
     jobs = json.load(f)
 
-user_text = st.text_area(
-    "Décris tes compétences et expériences (projets, outils, technologies, missions réalisées) :",
-    height=200,
-    placeholder="Exemple : J'ai nettoyé des données en Python, fait des dashboards, et entraîné des modèles de régression..."
+# ================== QUESTIONNAIRE STRUCTURÉ ==================
+st.subheader("Questionnaire structuré")
+
+python_level = st.slider(
+    "Ton niveau en Python (1 = débutant, 5 = avancé)",
+    min_value=1, max_value=5, value=3
+)
+ml_level = st.slider(
+    "Ton niveau en Machine Learning (1 = débutant, 5 = avancé)",
+    min_value=1, max_value=5, value=3
+)
+nlp_level = st.slider(
+    "Ton niveau en NLP (1 = aucun, 5 = très à l'aise)",
+    min_value=1, max_value=5, value=2
 )
 
+has_projects = st.selectbox(
+    "As-tu déjà réalisé au moins un projet complet en data / IA ?",
+    ["Non", "Oui"]
+)
+
+tools_used = st.multiselect(
+    "Quels outils as-tu déjà utilisés ?",
+    ["Python", "R", "SQL", "Power BI", "Tableau", "TensorFlow", "PyTorch", "Scikit-learn", "Autre"]
+)
+
+tokenization_used = st.selectbox(
+    "As-tu déjà utilisé des techniques de tokenization (découpage de texte en tokens) en NLP ?",
+    ["Non", "Oui"]
+)
+
+# ================== QUESTION OUVERTE ==================
+st.subheader("Description détaillée de ton profil")
+
+skills_text = st.text_area(
+    "Décris tes compétences clés :",
+    height=120,
+    placeholder="Exemple : Python, analyse de données, visualisation, statistiques..."
+)
+
+experience_text = st.text_area(
+    "Décris tes expériences (stages, alternance, projets académiques, jobs) :",
+    height=120,
+    placeholder="Exemple : Stage en data analyst, projets de classification, etc."
+)
+
+projects_text = st.text_area(
+    "Décris quelques projets importants que tu as réalisés :",
+    height=120,
+    placeholder="Exemple : Projet de prédiction, dashboard Power BI, chatbot, etc."
+)
+
+likes_text = st.text_area(
+    "Décris ce que tu aimes faire (ce qui t'intéresse le plus en data / IA / tech) :",
+    height=120,
+    placeholder="Exemple : J'aime surtout le NLP, l'explicabilité des modèles, les visualisations, etc."
+)
+
+# On combine tout pour l'analyse sémantique
+combined_text = "\n".join([
+    skills_text.strip(),
+    experience_text.strip(),
+    projects_text.strip(),
+    likes_text.strip()
+]).strip()
+
+# ================== ANALYSE ==================
 if st.button("Analyser mon profil"):
-    if not user_text.strip():
-        st.warning("Merci de saisir au moins une phrase.")
+    if not combined_text.strip():
+        st.warning("Merci de remplir au moins une des zones de texte.")
     else:
         with st.spinner("Analyse sémantique en cours..."):
             # 1) Prétraitement
-            cleaned_text = preprocess_text(user_text)
+            cleaned_text = preprocess_text(combined_text)
 
             # 2) Enrichissement GenAI (EF4.1) si configuré
             genai_client = None
@@ -96,6 +198,41 @@ if st.button("Analyser mon profil"):
                     )
                     bio_text = None
 
+        # === Sauvegarde structurée des résultats ===
+        timestamp = datetime.now().isoformat(timespec="seconds")
+        profile_label = get_global_profile_label(global_score)
+
+        result_record = {
+            "timestamp": timestamp,
+            "questionnaire": {
+                "python_level": python_level,
+                "ml_level": ml_level,
+                "nlp_level": nlp_level,
+                "has_projects": has_projects,
+                "tools_used": tools_used,
+                "tokenization_used": tokenization_used,
+                "skills_text": skills_text,
+                "experience_text": experience_text,
+                "projects_text": projects_text,
+                "likes_text": likes_text,
+                "combined_text": combined_text
+
+            },
+            "analysis": {
+                "block_scores": block_scores,
+                "global_score": global_score,
+                "profile_label": profile_label,
+                "job_scores": job_scores,
+                "top_3_jobs": top_3_jobs
+            },
+            "genai": {
+                "plan_text": plan_text,
+                "bio_text": bio_text
+            }
+        }
+
+        save_result(result_record)
+
         # === Affichage des résultats ===
         st.subheader("Scores par bloc de compétences")
         st.json(block_scores)
@@ -116,8 +253,33 @@ if st.button("Analyser mon profil"):
 
             st.pyplot(fig)
 
+            # === Radar chart des scores par bloc (bonus) ===
+            if len(blocks) >= 3:
+                st.subheader("Radar des compétences par bloc")
+
+                labels = blocks
+                stats = scores
+
+                num_vars = len(labels)
+                angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False)
+
+                # Fermer le graphe
+                stats_cycle = stats + [stats[0]]
+                angles_cycle = np.concatenate([angles, [angles[0]]])
+
+                fig_radar, ax_radar = plt.subplots(subplot_kw=dict(polar=True))
+                ax_radar.plot(angles_cycle, stats_cycle)
+                ax_radar.fill(angles_cycle, stats_cycle, alpha=0.25)
+                ax_radar.set_thetagrids(angles * 180 / np.pi, labels)
+                ax_radar.set_ylim(0, 1)
+                ax_radar.set_title("Profil de compétences par bloc")
+
+                st.pyplot(fig_radar)
+
         st.subheader("Score global de couverture")
         st.write(round(global_score, 3))
+
+        st.write(f"**Profil global suggéré :** {profile_label}")
 
         st.subheader("Top 3 métiers recommandés")
         if top_3_jobs:
