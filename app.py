@@ -180,7 +180,7 @@ if st.button("Analyser mon profil"):
 
                 # Plan de progression
                 try:
-                    plan_text = genai_client.generate_plan(block_scores)
+                    plan_text = genai_client.generate_plan(block_scores, combined_text)
                 except Exception as e:
                     st.warning(
                         f"Impossible de générer le plan de progression avec GenAI ({e}). "
@@ -190,7 +190,7 @@ if st.button("Analyser mon profil"):
 
                 # Bio professionnelle
                 try:
-                    bio_text = genai_client.generate_bio(block_scores, top_job_names)
+                    bio_text = genai_client.generate_bio(block_scores, top_job_names, combined_text)
                 except Exception as e:
                     st.warning(
                         f"Impossible de générer la bio professionnelle avec GenAI ({e}). "
