@@ -43,21 +43,26 @@ class SemanticScorer:
         """
         Calcule un score pour chaque métier en fonction des blocs requis.
 
-        jobs : dict {job_title: [block_name1, block_name2, ...]}
+        jobs : dict {job_title: {block_name: weight, ...}}
         Retourne un dict {job_title: score}
         """
         job_scores = {}
 
         for job_title, required_blocks in jobs.items():
-            scores = []
-            for block in required_blocks:
-                if block in block_scores:
-                    scores.append(block_scores[block])
+            weighted_sum = 0.0
+            total_weight = 0.0
 
-            if scores:
-                job_scores[job_title] = float(np.mean(scores))
+            # required_blocks est maintenant un dict {block_name: weight}
+            for block_name, weight in required_blocks.items():
+                if block_name in block_scores and weight > 0:
+                    weighted_sum += block_scores[block_name] * weight
+                    total_weight += weight
+
+            if total_weight > 0:
+                job_scores[job_title] = float(weighted_sum / total_weight)
             else:
                 # Si aucun bloc trouvé, on met 0 pour ce métier
                 job_scores[job_title] = 0.0
 
         return job_scores
+

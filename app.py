@@ -71,6 +71,10 @@ with open("data/jobs.json", "r") as f:
 # ================== QUESTIONNAIRE STRUCTURÉ ==================
 st.subheader("Questionnaire structuré")
 
+first_name = st.text_input("Prénom")
+last_name = st.text_input("Nom")
+
+
 python_level = st.slider(
     "Ton niveau en Python (1 = débutant, 5 = avancé)",
     min_value=1, max_value=5, value=3
@@ -136,7 +140,9 @@ combined_text = "\n".join([
 
 # ================== ANALYSE ==================
 if st.button("Analyser mon profil"):
-    if not combined_text.strip():
+    if not first_name.strip() or not last_name.strip():
+        st.warning("Merci de renseigner ton prénom et ton nom.")
+    elif not combined_text.strip():
         st.warning("Merci de remplir au moins une des zones de texte.")
     else:
         with st.spinner("Analyse sémantique en cours..."):
@@ -204,6 +210,10 @@ if st.button("Analyser mon profil"):
 
         result_record = {
             "timestamp": timestamp,
+            "user": {
+                "first_name": first_name,
+                "last_name": last_name
+            },
             "questionnaire": {
                 "python_level": python_level,
                 "ml_level": ml_level,
@@ -216,7 +226,6 @@ if st.button("Analyser mon profil"):
                 "projects_text": projects_text,
                 "likes_text": likes_text,
                 "combined_text": combined_text
-
             },
             "analysis": {
                 "block_scores": block_scores,
@@ -322,3 +331,51 @@ if st.button("Analyser mon profil"):
             st.write(bio_text)
         else:
             st.info("La bio professionnelle sera générée lorsque la GenAI sera correctement configurée ou disponible.")
+
+
+        # === Historique des utilisateurs ===
+        st.markdown("---")
+        st.subheader("Historique des utilisateurs et métier recommandé")
+
+        if os.path.exists(USER_RESULTS_PATH):
+            try:
+                with open(USER_RESULTS_PATH, "r") as f:
+                    data = json.load(f)
+                    if not isinstance(data, list):
+                        data = []
+            except json.JSONDecodeError:
+                data = []
+        else:
+            data = []
+
+        if not data:
+            st.info("Aucun utilisateur enregistré pour le moment.")
+        else:
+            # On construit un tableau simple : Nom, Prénom, Date, Métier recommandé principal
+            rows = []
+            for entry in data:
+                user = entry.get("user", {})
+                analysis = entry.get("analysis", {})
+
+                first = user.get("first_name", "")
+                last = user.get("last_name", "")
+                ts = entry.get("timestamp", "")
+
+                top_jobs = analysis.get("top_3_jobs") or []
+                # top_3_jobs est une liste de [job, score]
+                if top_jobs and isinstance(top_jobs[0], list):
+                    main_job = top_jobs[0][0]
+                elif top_jobs and isinstance(top_jobs[0], tuple):
+                    main_job = top_jobs[0][0]
+                else:
+                    main_job = "N/A"
+
+                rows.append({
+                    "Date": ts,
+                    "Prénom": first,
+                    "Nom": last,
+                    "Métier recommandé (n°1)": main_job
+                })
+
+            st.dataframe(rows)
+
