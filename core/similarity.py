@@ -12,24 +12,32 @@ class SemanticScorer:
     def compute_block_scores(self, user_embeddings, model):
         """
         Calcule un score de similarité sémantique pour chaque bloc de compétences.
+
+        Ici, on ne score plus chaque mini-compétence individuellement.
+        On construit une phrase descriptive par bloc (en concaténant les mini-compétences),
+        puis on calcule la similarité entre :
+            - le texte utilisateur (user_embeddings)
+            - le bloc de compétences (embedding unique par bloc)
+
         Retourne un dict {block_name: score}.
         """
         block_scores = {}
 
         for block, skills in self.competencies.items():
-            # Embeddings des compétences du bloc
-            comp_embeddings = model.encode(skills, convert_to_tensor=True)
+            # 1) Construire une phrase qui représente le BLOC de compétences
+            #    (on concatène les mini-compétences pour décrire le bloc)
+            block_description = ". ".join(skills)
 
-            # Similarités entre le texte utilisateur et chaque compétence du bloc
-            similarities = util.cos_sim(user_embeddings, comp_embeddings)
+            # 2) Embedding du bloc (UNE seule phrase par bloc)
+            block_embedding = model.encode([block_description], convert_to_tensor=True)
 
-            # Pour chaque entrée utilisateur, on prend la similarité max
-            max_sim = [float(sim.max()) for sim in similarities]
-
-            # Score du bloc = moyenne des max_sim
-            block_scores[block] = float(np.mean(max_sim))
+            # 3) Similarité cosinus entre le texte utilisateur (agrégé) et ce bloc
+            similarities = util.cos_sim(user_embeddings, block_embedding)
+            # similarities est un tensor 1x1 -> on récupère la valeur scalaire
+            block_scores[block] = float(similarities[0][0])
 
         return block_scores
+
 
     def compute_global_score(self, block_scores: dict) -> float:
         """

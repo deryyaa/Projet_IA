@@ -18,12 +18,13 @@ USER_RESULTS_PATH = "outputs/user_results.json"
 def save_result(raw_answers: dict):
     """
     Sauvegarde une nouvelle entrée dans outputs/user_results.json.
+    Ne garde que les 15 résultats les plus récents (basés sur 'timestamp').
     raw_answers : dict contenant réponses utilisateur + scores + reco.
     """
     # Charger l'existant
     if os.path.exists(USER_RESULTS_PATH):
         try:
-            with open(USER_RESULTS_PATH, "r") as f:
+            with open(USER_RESULTS_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 if not isinstance(data, list):
                     data = []
@@ -32,10 +33,33 @@ def save_result(raw_answers: dict):
     else:
         data = []
 
+    # On trie par date décroissante et on ne garde que les 15 plus récents
+        data = sorted(
+            data,
+            key=lambda r: r.get("timestamp", ""),
+            reverse=True
+        )[:15]
+
+
+    # Ajouter le nouveau résultat
     data.append(raw_answers)
 
-    with open(USER_RESULTS_PATH, "w") as f:
+    # Trier par timestamp décroissant (plus récent -> plus ancien)
+    # 'timestamp' est créé avec datetime.now().isoformat(timespec="seconds")
+    data = sorted(
+        data,
+        key=lambda r: r.get("timestamp", ""),
+        reverse=True
+    )
+
+    # Ne garder que les 15 plus récents
+    data = data[:15]
+
+    # Sauvegarder
+    os.makedirs(os.path.dirname(USER_RESULTS_PATH), exist_ok=True)
+    with open(USER_RESULTS_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+
 
 
 def get_global_profile_label(global_score: float) -> str:
@@ -50,7 +74,7 @@ def get_global_profile_label(global_score: float) -> str:
         return "Entry-level Analyst"
 
 
-st.title("AISCA – Agent Intelligent Sémantique pour la Cartographie des Compétences")
+st.title("AISCA – Trouve ton métier idéal dans la Data")
 
 st.markdown("""
 Bienvenue dans le MVP d'AISCA.
