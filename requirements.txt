@@ -1,0 +1,9 @@
+streamlit
+sentence-transformers
+torch
+numpy
+google-generativeai
+python-dotenv
+matplotlib
+
+
