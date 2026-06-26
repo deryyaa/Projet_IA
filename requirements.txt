@@ -2,8 +2,6 @@ streamlit
 sentence-transformers
 torch
 numpy
-google-generativeai
+groq
 python-dotenv
 matplotlib
-
-
